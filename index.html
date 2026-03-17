@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Name - UX Research & Filmmaking</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+    <style>
+        /* ===== CSS Variables ===== */
+        :root {
+            --color-black: #0A0A0A;
+            --color-white: #FAFAFA;
+            --color-grey: #B0B0B0;
+            --color-yellow: #FFC800;
+            
+            --color-bg: #0A0A0A;
+            --color-text: #FAFAFA;
+            --color-text-secondary: #B0B0B0;
+            --color-accent: #FFC800;
+            --color-border: #FFC800;
+            
+            --font-sans: 'Archivo', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-serif: 'Instrument Serif', Georgia, serif;
+            --font-avenir: 'Avenir', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-helvetica: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            
+            --spacing-xs: 0.5rem;
+            --spacing-sm: 1rem;
+            --spacing-md: 2rem;
+            --spacing-lg: 4rem;
+            --spacing-xl: 6rem;
+            
+            --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            line-height: 1.6;
+            font-size: 16px;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: 400;
+            line-height: 1.2;
+        }
+
+        a {
+            color: var(--color-text);
+            text-decoration: none;
+            transition: var(--transition-smooth);
+        }
+
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 1.5rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--color-border);
+            z-index: 1000;
+            animation: slideDown 0.6s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .nav-logo {
+            font-size: 1rem;
+            font-weight: 500;
+            letter-spacing: -0.02em;
+        }
+
+        .nav-logo:hover {
+            opacity: 0.7;
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 6px;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        .hamburger span {
+            width: 24px;
+            height: 2px;
+            background: var(--color-white);
+            transition: var(--transition-smooth);
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(8px, 8px);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -7px);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            font-size: 0.9rem;
+            font-weight: 400;
+            color: var(--color-text-secondary);
+            position: relative;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--color-white);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--color-yellow);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after,
+        .nav-links a.active::after {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero-container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: var(--spacing-xl) var(--spacing-lg);
+            text-align: center;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 900px;
+        }
+
+        .hero-greeting {
+            font-family: var(--font-avenir);
+            font-size: 1.15rem;
+            color: var(--color-white);
+            margin-bottom: var(--spacing-sm);
+            font-weight: 400;
+        }
+
+        .hero-title {
+            font-family: var(--font-helvetica);
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 500;
+            line-height: 1.1;
+            margin-bottom: var(--spacing-md);
+            letter-spacing: -0.02em;
+            color: var(--color-yellow);
+        }
+
+        /* Scroll Indicator */
+        .scroll-indicator {
+            position: absolute;
+            bottom: var(--spacing-lg);
+            left: 0;
+            right: 0;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--spacing-xs);
+            color: var(--color-text-secondary);
+            font-size: 0.75rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            width: fit-content;
+        }
+
+        .scroll-line {
+            width: 1px;
+            height: 40px;
+            background: var(--color-text-secondary);
+            animation: scrollPulse 2s infinite;
+        }
+
+        @keyframes scrollPulse {
+            0%, 100% {
+                opacity: 0.3;
+                transform: scaleY(1);
+            }
+            50% {
+                opacity: 1;
+                transform: scaleY(1.2);
+            }
+        }
+
+        /* Sections */
+        section {
+            padding: var(--spacing-xl) var(--spacing-lg);
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-family: var(--font-serif);
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 300;
+            margin-bottom: var(--spacing-lg);
+            letter-spacing: -0.02em;
+        }
+
+        .section-intro {
+            font-size: 1.15rem;
+            color: var(--color-text-secondary);
+            margin-bottom: var(--spacing-lg);
+            line-height: 1.8;
+        }
+
+        /* About Section */
+        .about-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: var(--spacing-lg);
+        }
+
+        .about-text p {
+            margin-bottom: var(--spacing-md);
+            line-height: 1.8;
+            color: var(--color-text-secondary);
+        }
+
+        .about-text p.lead {
+            font-size: 1.25rem;
+            color: var(--color-text);
+        }
+
+        .about-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-md);
+        }
+
+        .sidebar-section h3 {
+            font-size: 1rem;
+            font-weight: 500;
+            margin-bottom: var(--spacing-sm);
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: var(--color-text);
+        }
+
+        .skill-list {
+            list-style: none;
+        }
+
+        .skill-list li {
+            padding: var(--spacing-xs) 0;
+            color: var(--color-text-secondary);
+            border-bottom: 1px solid #2A2A2A;
+            font-size: 0.95rem;
+        }
+
+        .skill-list li:last-child {
+            border-bottom: none;
+        }
+
+        /* Work Grid - Yellow on Hover Only */
+        .work-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: var(--spacing-md);
+        }
+
+        .work-item {
+            background: transparent;
+            padding: var(--spacing-md);
+            border: 1px solid #2A2A2A;
+            border-radius: 8px;
+            transition: var(--transition-smooth);
+            color: var(--color-text);
+        }
+
+        .work-item:hover {
+            background: var(--color-yellow);
+            color: var(--color-black);
+            border-color: var(--color-yellow);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(255, 200, 0, 0.2);
+        }
+
+        .work-image {
+            width: 100%;
+            aspect-ratio: 16 / 10;
+            background: linear-gradient(135deg, #1A1A1A, #2A2A2A);
+            margin-bottom: var(--spacing-sm);
+            border-radius: 4px;
+        }
+
+        .work-item:hover .work-image {
+            background: linear-gradient(135deg, #FFD94D, #FFA500);
+        }
+
+        .work-meta {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: var(--spacing-xs);
+            font-size: 0.85rem;
+        }
+
+        .work-category {
+            color: var(--color-text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-weight: 600;
+        }
+
+        .work-item:hover .work-category {
+            color: var(--color-black);
+        }
+
+        .work-year {
+            color: var(--color-text-secondary);
+        }
+
+        .work-item:hover .work-year {
+            color: var(--color-black);
+            opacity: 0.7;
+        }
+
+        .work-title {
+            font-family: var(--font-serif);
+            font-size: 1.5rem;
+            margin-bottom: var(--spacing-xs);
+            letter-spacing: -0.01em;
+        }
+
+        .work-description {
+            color: var(--color-text-secondary);
+            line-height: 1.7;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .work-item:hover .work-description {
+            color: var(--color-black);
+            opacity: 0.85;
+        }
+
+        .work-link {
+            display: inline-block;
+            color: var(--color-text);
+            font-weight: 600;
+            border-bottom: 2px solid var(--color-text-secondary);
+            transition: var(--transition-smooth);
+        }
+
+        .work-link:hover {
+            border-bottom-color: var(--color-text);
+        }
+
+        .work-item:hover .work-link {
+            color: var(--color-black);
+            border-bottom-color: var(--color-black);
+        }
+
+        /* Personal Ventures */
+        .ventures-grid {
+            display: grid;
+            gap: var(--spacing-md);
+        }
+
+        .venture-item {
+            padding: var(--spacing-md);
+            border: 1px solid #2A2A2A;
+            border-radius: 8px;
+            transition: var(--transition-smooth);
+        }
+
+        .venture-item:hover {
+            border-color: var(--color-yellow);
+            transform: translateX(4px);
+        }
+
+        .venture-title {
+            font-family: var(--font-serif);
+            font-size: 1.5rem;
+            margin-bottom: var(--spacing-sm);
+            letter-spacing: -0.01em;
+        }
+
+        .venture-description {
+            color: var(--color-text-secondary);
+            line-height: 1.7;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .venture-tags {
+            display: flex;
+            gap: var(--spacing-xs);
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            padding: 0.25rem 0.75rem;
+            font-size: 0.8rem;
+            border: 1px solid #2A2A2A;
+            color: var(--color-text-secondary);
+            letter-spacing: 0.05em;
+        }
+
+        /* Contact Section */
+        .contact-content {
+            max-width: 800px;
+        }
+
+        .contact-methods {
+            display: grid;
+            gap: var(--spacing-md);
+            margin-top: var(--spacing-lg);
+        }
+
+        .contact-item h3 {
+            font-size: 0.85rem;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--color-text-secondary);
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .contact-item a {
+            font-size: 1.25rem;
+            color: var(--color-text);
+            transition: var(--transition-smooth);
+        }
+
+        .contact-item a:hover {
+            color: var(--color-yellow);
+        }
+
+        .contact-item p {
+            font-size: 1.25rem;
+            color: var(--color-text-secondary);
+        }
+
+        /* Animations */
+        .fade-in {
+            opacity: 0;
+            animation: fadeIn 0.8s ease-out forwards;
+        }
+
+        .fade-in-delay-1 {
+            opacity: 0;
+            animation: fadeIn 0.8s ease-out 0.2s forwards;
+        }
+
+        .fade-in-delay-2 {
+            opacity: 0;
+            animation: fadeIn 0.8s ease-out 0.4s forwards;
+        }
+
+        .fade-in-delay-3 {
+            opacity: 0;
+            animation: fadeIn 0.8s ease-out 0.6s forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav {
+                padding: 1rem 1.5rem;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 70%;
+                height: 100vh;
+                background: var(--color-black);
+                flex-direction: column;
+                padding: var(--spacing-xl) var(--spacing-md);
+                gap: var(--spacing-md);
+                transition: right 0.3s ease;
+                border-left: 1px solid var(--color-border);
+                box-shadow: -4px 0 20px rgba(0, 0, 0, 0.5);
+            }
+
+            .nav-links.active {
+                right: 0;
+            }
+
+            .nav-links a {
+                font-size: 1.2rem;
+            }
+
+            section {
+                padding: var(--spacing-lg) var(--spacing-md);
+            }
+
+            .about-content {
+                grid-template-columns: 1fr;
+            }
+
+            .work-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-cta {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .btn-primary,
+            .btn-secondary {
+                width: 100%;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <a href="#home" class="nav-logo">Your Name</a>
+        <div class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="#home" class="active">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#work">Work</a></li>
+            <li><a href="#ventures">Personal Venture</a></li>
+            <li><a href="#contact">Contact Me</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero Section (Home) -->
+    <section id="home" class="hero-container">
+        <div class="hero-content">
+            <p class="hero-greeting fade-in">Hey peeps 👋</p>
+            <h1 class="hero-title fade-in-delay-1">
+                I turn research into insights that drive ideas forward
+            </h1>
+        </div>
+        
+        <div class="scroll-indicator fade-in-delay-3">
+            <span>Scroll</span>
+            <div class="scroll-line"></div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about">
+        <h2 class="section-title">About Me</h2>
+        
+        <div class="about-content">
+            <div class="about-text">
+                <p class="lead">
+                    I'm a UX researcher and filmmaker based in Kuala Lumpur, Malaysia. 
+                    I believe the best insights come from genuine human connection and 
+                    careful observation.
+                </p>
+                
+                <p>
+                    My work sits at the intersection of qualitative research and visual 
+                    storytelling. As a UX researcher, I uncover the motivations and pain 
+                    points that drive user behavior. As a filmmaker, I capture the emotional 
+                    truths that data alone cannot express.
+                </p>
+                
+                <p>
+                    I've worked with startups and established companies across Southeast Asia, 
+                    helping them build products that truly resonate with their users. My research 
+                    approach is deeply collaborative—I believe the best solutions emerge when 
+                    teams work together to understand their users' needs.
+                </p>
+            </div>
+            
+            <div class="about-sidebar">
+                <div class="sidebar-section">
+                    <h3>UX Research</h3>
+                    <ul class="skill-list">
+                        <li>User Interviews</li>
+                        <li>Usability Testing</li>
+                        <li>Data Synthesis</li>
+                        <li>Journey Mapping</li>
+                    </ul>
+                </div>
+                
+                <div class="sidebar-section">
+                    <h3>Tools</h3>
+                    <ul class="skill-list">
+                        <li>Figma</li>
+                        <li>Miro</li>
+                        <li>Dovetail</li>
+                        <li>Premiere Pro</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Work Section (UX Research Only) -->
+    <section id="work">
+        <h2 class="section-title">UX Research Work</h2>
+        
+        <div class="work-grid">
+            <article class="work-item">
+                <div class="work-image"></div>
+                <div class="work-meta">
+                    <span class="work-category">UX Research</span>
+                    <span class="work-year">2024</span>
+                </div>
+                <h3 class="work-title">E-Commerce User Journey Study</h3>
+                <p class="work-description">
+                    Comprehensive analysis of user behavior across mobile and desktop platforms, 
+                    identifying critical friction points in the checkout process.
+                </p>
+                <a href="#" class="work-link">View Case Study →</a>
+            </article>
+
+            <article class="work-item">
+                <div class="work-image"></div>
+                <div class="work-meta">
+                    <span class="work-category">UX Research</span>
+                    <span class="work-year">2023</span>
+                </div>
+                <h3 class="work-title">Healthcare App Accessibility Audit</h3>
+                <p class="work-description">
+                    Usability testing with diverse user groups delivering actionable 
+                    recommendations for inclusive design.
+                </p>
+                <a href="#" class="work-link">View Case Study →</a>
+            </article>
+
+            <article class="work-item">
+                <div class="work-image"></div>
+                <div class="work-meta">
+                    <span class="work-category">UX Research</span>
+                    <span class="work-year">2023</span>
+                </div>
+                <h3 class="work-title">Fintech Onboarding Research</h3>
+                <p class="work-description">
+                    User interviews and task analysis revealing barriers to account creation 
+                    for first-time digital banking users.
+                </p>
+                <a href="#" class="work-link">View Case Study →</a>
+            </article>
+        </div>
+    </section>
+
+    <!-- Personal Ventures (Filmmaking) -->
+    <section id="ventures">
+        <h2 class="section-title">Personal Ventures</h2>
+        <p class="section-intro">
+            Film projects and creative experiments that fuel my curiosity.
+        </p>
+        
+        <div class="ventures-grid">
+            <article class="venture-item">
+                <h3 class="venture-title">Voices of the Valley</h3>
+                <p class="venture-description">
+                    A 20-minute documentary exploring the intersection of technology and community 
+                    in rural Malaysia, capturing authentic stories of adaptation and resilience.
+                </p>
+                <div class="venture-tags">
+                    <span class="tag">Documentary</span>
+                    <span class="tag">2023</span>
+                </div>
+            </article>
+
+            <article class="venture-item">
+                <h3 class="venture-title">In Between Moments</h3>
+                <p class="venture-description">
+                    An experimental narrative piece examining the quiet spaces of daily life, 
+                    shot entirely on 16mm film and screened at regional film festivals.
+                </p>
+                <div class="venture-tags">
+                    <span class="tag">Short Film</span>
+                    <span class="tag">2023</span>
+                </div>
+            </article>
+
+            <article class="venture-item">
+                <h3 class="venture-title">The Last Projectionists</h3>
+                <p class="venture-description">
+                    A portrait of cinema workers adapting to the digital age, exploring themes 
+                    of craft, obsolescence, and the persistence of analog passion.
+                </p>
+                <div class="venture-tags">
+                    <span class="tag">Documentary</span>
+                    <span class="tag">2022</span>
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact">
+        <h2 class="section-title">Let's Connect</h2>
+        
+        <div class="contact-content">
+            <p class="section-intro">
+                I'm always open to discussing new projects, creative collaborations, 
+                or opportunities to be part of your vision.
+            </p>
+            
+            <div class="contact-methods">
+                <div class="contact-item">
+                    <h3>Email</h3>
+                    <a href="/cdn-cgi/l/email-protection#abd2c4ded985cec6cac2c7ebced3cac6dbc7ce85c8c4c6"><span class="__cf_email__" data-cfemail="1d6472686f3378707c74715d78657c706d7178337e7270">[email&#160;protected]</span></a>
+                </div>
+                
+                <div class="contact-item">
+                    <h3>LinkedIn</h3>
+                    <a href="https://linkedin.com/in/yourname" target="_blank">linkedin.com/in/yourname</a>
+                </div>
+                
+                <div class="contact-item">
+                    <h3>Vimeo</h3>
+                    <a href="https://vimeo.com/yourname" target="_blank">vimeo.com/yourname</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+        // Hamburger menu toggle
+        const hamburger = document.querySelector('.hamburger');
+        const navLinks = document.querySelector('.nav-links');
+
+        if (hamburger) {
+            hamburger.addEventListener('click', () => {
+                hamburger.classList.toggle('active');
+                navLinks.classList.toggle('active');
+            });
+
+            // Close menu when clicking on a link
+            const links = document.querySelectorAll('.nav-links a');
+            links.forEach(link => {
+                link.addEventListener('click', () => {
+                    hamburger.classList.remove('active');
+                    navLinks.classList.remove('active');
+                });
+            });
+
+            // Close menu when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!hamburger.contains(e.target) && !navLinks.contains(e.target)) {
+                    hamburger.classList.remove('active');
+                    navLinks.classList.remove('active');
+                }
+            });
+        }
+
+        // Active nav link on scroll
+        const sections = document.querySelectorAll('section');
+        const navItems = document.querySelectorAll('.nav-links a');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (pageYOffset >= sectionTop - 200) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navItems.forEach(item 
